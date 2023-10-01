@@ -3,11 +3,14 @@ import { CallbackManager } from "langchain/callbacks";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { BufferMemory } from "langchain/memory";
-import { TextLoader } from "langchain/document_loaders/fs/text";
+// import { TextLoader } from "langchain/document_loaders/fs/text";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { Document } from "langchain/document";
 
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
+
+import { text } from "../../../docs/summary";
 
 // export const runtime = "edge";
 
@@ -22,21 +25,23 @@ export async function POST(req: Request) {
     callbackManager: CallbackManager.fromHandlers(handlers),
   });
 
-  const loader = new TextLoader("docs/summary.txt");
-
-  const data = await loader.load();
+  // TODO: Think how to load the data from the file system
+  // const loader = new TextLoader("docs/summary.txt");
+  // const data = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
     chunkOverlap: 0,
   });
 
-  const splitDocs = await textSplitter.splitDocuments(data);
+  const docOutput = await textSplitter.splitDocuments([
+    new Document({ pageContent: text }),
+  ]);
 
   const embeddings = new OpenAIEmbeddings();
 
   const vectorStore = await MemoryVectorStore.fromDocuments(
-    splitDocs,
+    docOutput,
     embeddings
   );
 
