@@ -1,9 +1,15 @@
 import { StreamingTextResponse, LangChainStream, Message } from "ai";
 import { CallbackManager } from "langchain/callbacks";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { AIChatMessage, HumanChatMessage } from "langchain/schema";
+import { ConversationalRetrievalQAChain } from "langchain/chains";
+import { BufferMemory } from "langchain/memory";
+import { TextLoader } from "langchain/document_loaders/fs/text";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
-export const runtime = "edge";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
+
+// export const runtime = "edge";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
@@ -16,14 +22,41 @@ export async function POST(req: Request) {
     callbackManager: CallbackManager.fromHandlers(handlers),
   });
 
-  llm
-    .call(
-      (messages as Message[]).map((m) =>
-        m.role == "user"
-          ? new HumanChatMessage(m.content)
-          : new AIChatMessage(m.content)
-      )
-    )
+  const loader = new TextLoader("docs/summary.txt");
+
+  const data = await loader.load();
+
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 500,
+    chunkOverlap: 0,
+  });
+
+  const splitDocs = await textSplitter.splitDocuments(data);
+
+  const embeddings = new OpenAIEmbeddings();
+
+  const vectorStore = await MemoryVectorStore.fromDocuments(
+    splitDocs,
+    embeddings
+  );
+
+  const memory = new BufferMemory({
+    memoryKey: "chat_history",
+    returnMessages: true,
+  });
+
+  const chain = ConversationalRetrievalQAChain.fromLLM(
+    llm,
+    vectorStore.asRetriever(),
+    {
+      memory,
+    }
+  );
+
+  chain
+    .call({
+      question: messages.at(-1).content,
+    })
     .catch(console.error);
 
   return new StreamingTextResponse(stream);

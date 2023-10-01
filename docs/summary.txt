@@ -1,0 +1,4 @@
+Hola soy Edsel, naci en Pachuca Hgo el 6 de Mayo de 1990.
+
+Estudia ingenieria en sistemas computacionales en ESCOM del Instituto Politecnico Nacional, egresé el 2012.
+Durante mis estudios hice un intercambio a Madrid durante 6 meses donde tome clases de criptografía, redes neuronales, programación vectorial.

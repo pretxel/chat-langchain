@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "ai": "2.0.1",
-    "langchain": "^0.0.99",
-    "next": "13.4.8",
+    "@heroicons/react": "^2.0.18",
+    "ai": "2.2.14",
+    "langchain": "^0.0.156",
+    "next": "^13.5.2",
     "react": "18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -20,6 +21,8 @@
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "^10.4.14",
+    "cheerio": "^1.0.0-rc.12",
+    "encoding": "^0.1.13",
     "eslint": "^7.32.0",
     "eslint-config-next": "13.4.4-canary.11",
     "postcss": "^8.4.23",
