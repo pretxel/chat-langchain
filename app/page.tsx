@@ -1,5 +1,5 @@
 "use client";
-
+import React, { useEffect, useRef } from "react";
 import { useChat } from "ai/react";
 import Header from "../components/Header";
 
@@ -24,12 +24,29 @@ function AIResponse({ message }: { message: string }) {
 }
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { isLoading, messages, input, handleInputChange, handleSubmit } =
+    useChat();
+  const scrollRef = useRef(null);
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [isLoading]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
-    <div className="mx-auto w-full flex flex-col stretch">
+    <div className="mx-auto w-full h-full flex flex-col stretch">
       <Header />
-      <ul className="space-y-2">
+      <ul className="space-y-2 h-max py-20 overflow-auto" ref={scrollRef}>
         {messages.length > 0
           ? messages.map((m) => (
               <>
