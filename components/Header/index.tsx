@@ -3,8 +3,7 @@ import { EnvelopeIcon } from "@heroicons/react/20/solid";
 const profile = {
   name: "Edsel Serrano",
   email: "pretxel100@gmail.com",
-  avatar:
-    "https://media.licdn.com/dms/image/C4D03AQEsDLa_ZGVf2w/profile-displayphoto-shrink_200_200/0/1645518240212?e=1701907200&v=beta&t=I6U2lge8pfThV8zi6slRNz57c72RYapPHFIm-sTZzxo",
+  avatar: "/avatar.jpeg",
   backgroundImage:
     "https://www.disfrutalanzarote.com/f/espana/lanzarote/guia/que-ver.jpg",
   fields: [],
