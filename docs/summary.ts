@@ -19,4 +19,6 @@ Las tecnologías en la nube con las que trabajo normalmente es con AWS y GCP, te
 
 Los idiomas que hablo son español e inglés
 
+Actualmente estoy trabajando en Leadtech como Team lead full stack.
+
 `;
